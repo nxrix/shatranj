@@ -213,7 +213,7 @@ export class Shatranj {
   }
 
   status() {
-    const checked = isCheck();
+    const checked = this.isCheck();
     if (!this.hasLegal()) return checked ? "checkmate" : "stalemateWin";
     const bare = this.bareKing();
     if (bare === "bareWin") return "bareWin";
