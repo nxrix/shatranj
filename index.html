@@ -61,14 +61,13 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
-import { Shatranj } from "https://cdn.jsdelivr.net/gh/nxrix/shatranj/src/shatranj.js";
+import { Shatranj } from "./src/shatranj.js";
 
 const VAL = [0, 100, 320, 150, 600, 200, 20000];
 const AI_DEPTH = 4;
 const SQUARE = 1.0;
 const BOARD_THICK = 0.15;
-const PIECE_OBJ_URL = "https://cdn.jsdelivr.net/gh/nxrix/shatranj/assets/pieces.obj";
-//const PIECE_OBJ_URL = "https://cdn.jsdelivr.net/gh/nxrix/chess/assets/chess.obj";
+const PIECE_OBJ_URL = "./assets/pieces.obj";
 const NAMES = ["p","n","b","r","q","k"];
 
 let scene, camera, renderer, controls;
