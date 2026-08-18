@@ -60,14 +60,16 @@
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+//import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { Shatranj } from "./src/shatranj.js";
 
 const VAL = [0, 100, 320, 150, 600, 200, 20000];
 const AI_DEPTH = 4;
 const SQUARE = 1.0;
 const BOARD_THICK = 0.15;
-const PIECE_OBJ_URL = "./assets/pieces.obj";
+//const PIECE_OBJ_URL = "./assets/pieces.obj";
+const PIECE_GLB_URL = "./assets/pieces.glb";
 const NAMES = ["p","n","b","r","q","k"];
 
 let scene, camera, renderer, controls;
@@ -198,7 +200,7 @@ function buildBoard() {
   scene.add(ground);*/
 }
 
-function loadPieces() {
+/*function loadPieces() {
   return new Promise((resolve, reject) => {
     const loader = new OBJLoader();
     loader.load(
@@ -230,6 +232,57 @@ function loadPieces() {
           const cx = (bb.max.x + bb.min.x) / 2;
           const cz = (bb.max.z + bb.min.z) / 2;
           g.translate(-cx, -bb.min.y, -cz);
+          g.computeBoundingBox();
+        }
+        resolve();
+      },
+      undefined,
+      reject
+    );
+  });
+}*/
+
+function loadPieces() {
+  return new Promise((resolve, reject) => {
+    const loader = new GLTFLoader();
+    loader.load(
+      PIECE_GLB_URL,
+      (gltf) => {
+        const geoMap = {};
+        gltf.scene.traverse(child => {
+          if (!child.isMesh) return;
+          const name = (child.name || "").toLowerCase().trim();
+          if (NAMES.includes(name)) {
+            geoMap[name] = child;
+          }
+        });
+        for (const k of NAMES) {
+          const mesh = geoMap[k];
+          if (!mesh) {
+            console.warn(`Missing chess piece: ${k}`);
+            continue;
+          }
+          const geo = mesh.geometry.clone();
+          if (!geo.attributes.normal) {
+            geo.computeVertexNormals();
+          }
+          mesh.updateMatrixWorld(true);
+          geo.applyMatrix4(mesh.matrixWorld);
+          pieceGeoms[k] = geo;
+        }
+        for (const k in pieceGeoms) {
+          const g = pieceGeoms[k];
+          const scale = 0.75;
+          g.scale(scale, scale, scale);
+          g.computeBoundingBox();
+          const bb = g.boundingBox;
+          const cx = (bb.max.x + bb.min.x) / 2;
+          const cz = (bb.max.z + bb.min.z) / 2;
+          g.translate(
+            -cx,
+            -bb.min.y,
+            -cz
+          );
           g.computeBoundingBox();
         }
         resolve();
