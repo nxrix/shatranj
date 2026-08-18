@@ -94,7 +94,7 @@ const loadingEl = document.getElementById("loading");
 function initThree() {
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
   camera.position.set(0, 9, -8);
 
   //const context = canvas.getContext("webgl");
@@ -258,10 +258,6 @@ function loadPieces() {
         });
         for (const k of NAMES) {
           const mesh = geoMap[k];
-          if (!mesh) {
-            console.warn(`Missing chess piece: ${k}`);
-            continue;
-          }
           const geo = mesh.geometry.clone();
           if (!geo.attributes.normal) {
             geo.computeVertexNormals();
@@ -306,7 +302,7 @@ function makePieceMesh(piece) {
   });
   const mesh = new THREE.Mesh(geo, mat);
   mesh.castShadow = true;
-  mesh.rotation.y = (!isBlack)*Math.PI;
+  mesh.rotation.y = isBlack*Math.PI;
   return mesh;
 }
 
