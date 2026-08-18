@@ -50,8 +50,8 @@
 <script type="importmap">
 {
   "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.120.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.120.0/examples/jsm/"
+    "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
   }
 }
 </script>
@@ -92,11 +92,11 @@ const loadingEl = document.getElementById("loading");
 function initThree() {
   scene = new THREE.Scene();
 
-  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 9, 8);
+  camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 9, -8);
 
   //const context = canvas.getContext("webgl");
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = false;//true;
@@ -105,14 +105,9 @@ function initThree() {
 
   controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
-  controls.dampingFactor = 0.1;
-  controls.minPolarAngle = 0.15;
-  controls.maxPolarAngle = Math.PI / 2.05;
-  controls.minDistance = 6;
-  controls.maxDistance = 18;
-  controls.enablePan = false;
+  controls.dampingFactor = 0.125;
+  controls.maxDistance = 24;
   controls.target.set(0, 0, 0);
-  controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.55));
 
